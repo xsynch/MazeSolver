@@ -41,6 +41,7 @@ def main():
     cell_size_y = (600 - 2 * margin) / num_rows
     m1 = Maze(0, 0, num_rows, num_cols, cell_size_x, cell_size_y,win)
     m1.generate_maze()
+    print(m1.solve())
     
     # print(f"The number of maze cells is: {len(m1._cells)}")
             

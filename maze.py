@@ -1,4 +1,5 @@
 import time
+from turtle import undo
 from point import Point, Line, Cell 
 import random 
 
@@ -30,6 +31,7 @@ class Maze:
         start_x = 0
         start_y = 0
         self._break_walls_r(start_x, start_y)
+        self._reset_cells_visited()
 
     def _create_cells(self):
         for i in range(self.num_cols): 
@@ -118,20 +120,52 @@ class Maze:
 
 
     def _reset_cells_visited(self):
-        for i in range(self.num_rows):
-            for j in range(self.num_cols):
+        for i in range(self.num_cols):
+            for j in range(self.num_rows):
                 self._cells[i][j].visited = False                
 
     def solve(self):
-        return False 
+        return self._solve_r(0,0) 
     
-    def _solve_r(self):
-        i = 0
-        j = 0         
+    def _solve_r(self,x,y):
+        
+                
         self._animate()
-        self._cells[i][j].visited = True 
-        current_cell = self._cells[i][j]
-        # if current_cell == Cell()
+        self._cells[x][y].visited = True 
+        if x == self.num_cols -1 and y == self.num_rows -1:
+             return True 
+        directions = [(x,y-1),(x,y+1),(x+1,y),(x-1,y)]
+        for dir in directions:
+             
+             if 0 <= dir[0] < self.num_cols and 0 <= dir[1] < self.num_rows and not self._cells[dir[0]][dir[1]].visited:
+                
+                if dir[1] == y+1 and dir[0] == x and not self._cells[x][y].has_bottom_wall:
+                    self._cells[x][y].draw_move(self._cells[dir[0]][dir[1]])
+                    if not self._solve_r(dir[0],dir[1]):
+                         self._cells[x][y].draw_move(self._cells[dir[0]][dir[1]],undo=True)
+                    else:
+                         return True 
+                
+                elif dir[1] == y-1 and dir[0] == x and not self._cells[x][y].has_top_wall:
+                    self._cells[x][y].draw_move(self._cells[dir[0]][dir[1]])
+                    if not self._solve_r(dir[0],dir[1]):
+                         self._cells[x][y].draw_move(self._cells[dir[0]][dir[1]],undo=True)
+                    else:
+                         return True 
+                    
+                elif dir[0] == x+1 and dir[1] == y and not self._cells[x][y].has_right_wall:
+                    self._cells[x][y].draw_move(self._cells[dir[0]][dir[1]])
+                    if not self._solve_r(dir[0],dir[1]):
+                         self._cells[x][y].draw_move(self._cells[dir[0]][dir[1]],undo=True)
+                    else:
+                         return True 
+                elif dir[0] == x-1 and dir[1] == y and not self._cells[x][y].has_left_wall:
+                    self._cells[x][y].draw_move(self._cells[dir[0]][dir[1]])
+                    if not self._solve_r(dir[0],dir[1]):
+                         self._cells[x][y].draw_move(self._cells[dir[0]][dir[1]],undo=True)
+                    else:
+                         return True 
+
         
 
         return False

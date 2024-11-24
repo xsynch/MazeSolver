@@ -68,8 +68,8 @@ class Cell():
         return f"{__class__}({self.top_left},{self.bottom_right},{self.win})"   
     
     def draw_move(self, to_cell, undo=False):
-        halfway_from_cell_point = Point((self.top_left.x + self.bottom_right.x)/2,(self.top_left.y + self.bottom_right.y)/2)
-        halfway_to_cell_point = Point((to_cell.top_left.x + to_cell.bottom_right.x)/2,(to_cell.top_left.y + to_cell.bottom_right.y)/2)
+        halfway_from_cell_point = Point((self.top_left.x + self.bottom_right.x)//2,(self.top_left.y + self.bottom_right.y)//2)
+        halfway_to_cell_point = Point((to_cell.top_left.x + to_cell.bottom_right.x)//2,(to_cell.top_left.y + to_cell.bottom_right.y)//2)
         line = Line(halfway_from_cell_point, halfway_to_cell_point)
         if not undo:            
             line.draw(self.win, "red")
