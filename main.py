@@ -35,11 +35,14 @@ def main():
 
     win = Window(1024,768)
     num_cols = 12
-    num_rows = 10
-    m1 = Maze(0, 0, num_rows, num_cols, 10, 10,win)
+    num_rows = 12
+    margin = 50
+    cell_size_x = (800 - 2 * margin) / num_cols
+    cell_size_y = (600 - 2 * margin) / num_rows
+    m1 = Maze(0, 0, num_rows, num_cols, cell_size_x, cell_size_y,win)
     m1.generate_maze()
     
-    print(f"The number of maze cells is: {len(m1._cells)}")
+    # print(f"The number of maze cells is: {len(m1._cells)}")
             
 
     win.wait_for_close()

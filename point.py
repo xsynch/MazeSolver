@@ -41,34 +41,28 @@ class Cell():
         self.visited = False 
 
     def draw(self,color: str):
-        original_top_left = copy(self.top_left)
-        original_bottom_right = copy(self.bottom_right)
-        if self.has_top_wall:            
-            line = Line(self.top_left, self.bottom_right)                                    
-            line.draw(self.win,f=color) 
-        if not self.has_top_wall:
-            print(f"no top wall")
-        if self.has_bottom_wall:
-            self.top_left.y = original_top_left.y+50
-            self.bottom_right.y = original_bottom_right.y+50
-            
-            line = Line(self.top_left, self.bottom_right)                                    
-            line.draw(self.win,f=color)
-        if not self.has_bottom_wall:
-            print(f"no bottom wall")
-        if self.has_left_wall:  
-            self.top_left.y = original_top_left.y                      
-            self.bottom_right.x = original_top_left.x
-            self.bottom_right.y = original_bottom_right.y+50                        
-            line = Line(self.top_left, self.bottom_right)                                    
-            line.draw(self.win,f=color)                        
+
+        top_wall = Line(Point(self.top_left.x,self.top_left.y),Point(self.bottom_right.x, self.top_left.y))
+        right_wall = Line(Point(self.bottom_right.x, self.top_left.y),Point(self.bottom_right.x, self.bottom_right.y))
+        bottom_wall = Line(Point(self.top_left.x, self.bottom_right.y), Point(self.bottom_right.x, self.bottom_right.y))
+        left_wall = Line(Point(self.top_left.x, self.top_left.y), Point(self.top_left.x, self.bottom_right.y))
+        if self.has_top_wall:                        
+            top_wall.draw(self.win, f=color)
+        if not self.has_top_wall:            
+            top_wall.draw(self.win,f="#D9D9D9")
+        if self.has_bottom_wall:                                  
+            bottom_wall.draw(self.win,f=color)
+        if not self.has_bottom_wall: 
+            bottom_wall.draw(self.win,f="#D9D9D9")
+            # print(f"no bottom wall")
+        if self.has_left_wall:                                  
+            left_wall.draw(self.win,f=color)
+        if not self.has_left_wall:
+            left_wall.draw(self.win, f="#D9D9D9")                        
         if self.has_right_wall:
-            self.bottom_right.x = original_bottom_right.x
-            self.bottom_right.y = original_bottom_right.y+50
-            self.top_left.x = original_bottom_right.x
-            self.top_left.y = original_bottom_right.y            
-            line = Line(self.top_left, self.bottom_right)                                    
-            line.draw(self.win,f=color)             
+            right_wall.draw(self.win,f=color)             
+        if not self.has_right_wall:
+            right_wall.draw(self.win,f="#D9D9D9")
             
     def __repr__(self):
         return f"{__class__}({self.top_left},{self.bottom_right},{self.win})"   
@@ -81,5 +75,8 @@ class Cell():
             line.draw(self.win, "red")
         else: 
             line.draw(self.win,"gray")
+
+    def __eq__(self, other_cell):
+        return self.top_left.x == other_cell.top_left.x and self.top_left.y == other_cell.top_left.y and self.bottom_right.x == other_cell.bottom_right.x and self.bottom_right.y == other_cell.bottom_right.y
         
             
